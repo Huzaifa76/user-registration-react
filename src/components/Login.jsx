@@ -1,26 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { useFormik } from "formik";
-import { signUpSchema } from "../schemas";
 import { Link } from "react-router-dom";
+import { logInSchema } from "../schemas";
 
-const Registration = () => {
-    const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+const Login = () => {
+    const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
         initialValues: {
-            name: "",
             email: "",
             password: "",
-            confirm_password: ""
         },
-        validationSchema: signUpSchema,
-        onSubmit: async (values, action) => {
-            try {
-                const res = await fetch('https://registerformreact-default-rtdb.firebaseio.com/userRegisterInfo.json', {
-                    method: "POST",
+        validationSchema: logInSchema,
+        onSubmit:async (values, action) => {
+            // console.log(values);
+            try{
+                const res= await fetch("https://registerformreact-default-rtdb.firebaseio.com/userLoginInfo.json", {
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(values)
+                    }, 
+                        body: JSON.stringify(values)
                 });
                 if (res.ok) {
                     alert("Data stored successfully");
@@ -28,11 +27,12 @@ const Registration = () => {
                 } else {
                     alert("Error saving data");
                 }
-            } catch (error) {
+            }
+            catch(error){
                 console.error("Error:", error);
             }
         }
-    });
+    })
 
     return (
         <Wrapper>
@@ -42,24 +42,9 @@ const Registration = () => {
                         <div className="modal-left">
                             <h1 className="modal-title">Welcome!</h1>
                             <p className="modal-desc">
-                                Fill the form to Sign Up
+                                Fill the form to Sign In
                             </p>
                             <form onSubmit={handleSubmit} method="post">
-                                <div className="input-block">
-                                    <label htmlFor="name" className="input-label">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        autoComplete="off"
-                                        name="name"
-                                        id="name"
-                                        value={values.name}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {errors.name && touched.name && <p>{errors.name}</p>}
-                                </div>
                                 <div className="input-block">
                                     <label htmlFor="email" className="input-label">
                                         Email
@@ -90,34 +75,19 @@ const Registration = () => {
                                     />
                                     {errors.password && touched.password && <p>{errors.password}</p>}
                                 </div>
-                                <div className="input-block">
-                                    <label htmlFor="confirm_password" className="input-label">
-                                        Confirm Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        autoComplete="off"
-                                        name="confirm_password"
-                                        id="confirm_password"
-                                        value={values.confirm_password}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {errors.confirm_password && touched.confirm_password && <p>{errors.confirm_password}</p>}
-                                </div>
                                 <div className="modal-buttons">
                                     <button className="input-button" type="submit">
-                                        Registration
+                                        Login
                                     </button>
                                 </div>
                             </form>
                             <p className="sign-up">
-                                Already have an account? <Link to="/login">Sign In now</Link>
+                                Create an account? <Link to="/">Sign Up now</Link>
                             </p>
                         </div>
                         <div className="modal-right">
                             <img
-                                src="https://images.pexels.com/photos/7652145/pexels-photo-7652145.jpeg"
+                                src="https://images.pexels.com/photos/7437499/pexels-photo-7437499.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 alt=""
                             />
                         </div>
@@ -297,4 +267,4 @@ const Wrapper = styled.section`
   }
 `;
 
-export default Registration;
+export default Login;
